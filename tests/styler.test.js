@@ -1,4 +1,4 @@
-const styler = require('../lexer/modules/styler')
+const styler = require('../src/lexer/modules/styler')
 
 describe('styler basic', () => {
 	test('bold with __$__', () => expect(styler('__hej__')).toBe('<b>hej</b>'))

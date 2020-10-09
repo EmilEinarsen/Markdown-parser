@@ -1,5 +1,5 @@
-const parser = require('../parser/parser')
-const getFile = require('../files/getFile')
+const parser = require('../src/parser/parser')
+const getFile = require('./files/getFile')
 
 describe('file test, lexer', () => {
 
@@ -7,7 +7,7 @@ describe('file test, lexer', () => {
 		expect(
 			parser(tookenList())
 		).toBe(
-			await getFile('./files/text1.html')
+			await getFile('./tests/files/text1.html')
 		)
 	})
 })

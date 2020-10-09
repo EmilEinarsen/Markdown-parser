@@ -1,4 +1,4 @@
-const { h$, p, ul, li } = require('../lexer/modules/tooken')
+const { h$, p, ul, li } = require('../src/lexer/modules/tooken')
 
 describe('basic test, generator()', () => {
 	test('h3', () => {

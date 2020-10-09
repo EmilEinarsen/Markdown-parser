@@ -1,4 +1,4 @@
-const render = require('../parser/modules/render')
+const render = require('../src/parser/modules/render')
 
 describe('render()', () => {
 	test('linktag', () => {

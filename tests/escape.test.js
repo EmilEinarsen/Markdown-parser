@@ -1,4 +1,4 @@
-const escape = require('../lexer/modules/escape')
+const escape = require('../src/lexer/modules/escape')
 
 describe('escapeHTML', () => {
 	test('basic', () => {

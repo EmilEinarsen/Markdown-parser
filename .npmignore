@@ -1,8 +1,5 @@
 .cache
 files
-lexer
 node_modules
-parser
 tests
 .gitignore
-markdown.js

@@ -1,8 +1,8 @@
 {
   "name": "bjork_markdown",
-  "version": "1.0.0",
+  "version": "1.0.32",
   "description": "markdown",
-  "main": "dist/markdown.js",
+  "main": "index.js",
   "directories": {
     "test": "tests"
   },

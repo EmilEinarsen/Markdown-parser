@@ -1,5 +1,5 @@
-const lexer = require('../lexer/lexer')
-const getFile = require('../files/getFile')
+const lexer = require('../src/lexer/lexer')
+const getFile = require('./files/getFile')
 
 describe('basic should, one row', () => {
 
@@ -149,7 +149,7 @@ describe('file test, lexer', () => {
 
 	test('testfile1', async () => {
 		expect(
-			lexer(await getFile('./files/text1.md'))
+			lexer(await getFile('./tests/files/text1.md'))
 		).toStrictEqual([
 				{
 					name: "h6",
