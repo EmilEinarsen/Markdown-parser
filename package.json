@@ -1,0 +1,30 @@
+{
+  "name": "bjork_markdown",
+  "version": "1.0.0",
+  "description": "markdown",
+  "main": "dist/markdown.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest --watchAll",
+    "dev": "parcel markdown.js",
+    "build": "parcel build markdown.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EmilEinarsen/bjork_markdown.git"
+  },
+  "keywords": [
+    "markdown"
+  ],
+  "author": "Emil O. Einarsen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EmilEinarsen/bjork_markdown/issues"
+  },
+  "homepage": "https://github.com/EmilEinarsen/bjork_markdown#readme",
+  "devDependencies": {
+    "jest": "^26.5.2"
+  }
+}
