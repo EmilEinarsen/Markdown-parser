@@ -33,6 +33,13 @@ const ul = (
 	content
 )
 
+const ol = (
+	content
+) => tag(
+	'ol',
+	content
+)
+
 const li = (
 	content
 ) => tag(
@@ -40,4 +47,17 @@ const li = (
 	[styler(escape(content))]
 )
 
-module.exports = { tag, p, ul, li, h$ }
+const pre = (
+	content
+) => tag(
+	'pre',
+	[content]
+)
+const blockquote = (
+	content
+) => tag(
+	'blockquote',
+	content
+)
+
+module.exports = { tag, p, ul, ol, li, h$, pre, blockquote }

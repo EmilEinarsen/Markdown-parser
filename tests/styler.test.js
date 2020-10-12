@@ -13,13 +13,6 @@ describe('styler basic', () => {
 })
 
 describe('style offset', () => {
-	test('bold with ___$__', () => expect(styler('___hej__')).toBe('<b>_hej</b>'))
-
-	test('italic with __$_', () => expect(styler('__hej_')).toBe('<em>_hej</em>'))
-
-	test('bold with **$***', () => expect(styler('**hej***')).toBe('<b>hej*</b>'))
-
-	test('italic with *$**', () => expect(styler('*hej**')).toBe('<em>hej*</em>'))
 
 	test('link with [[$]($)', () => expect(styler('[[Google](https://google.se/)')).toBe('<a href="https://google.se/">[Google</a>'))
 	

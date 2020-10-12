@@ -1,6 +1,6 @@
 function render(tooken) {
 	let pieces = []
-
+	
 	render(tooken)
 
 	return pieces.join("")
@@ -16,7 +16,7 @@ function render(tooken) {
 
 
 		function textNode() {
-			pieces.push(tooken)
+			pieces.push(tooken.trim())
 		}
 
 		function lineBreak() {

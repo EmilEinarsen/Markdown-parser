@@ -1,10 +1,10 @@
-const { tag, p, ul, li, h$  } = require('./modules/tooken')
+const { tag, p, ul, ol, li, h$, pre, blockquote  } = require('./modules/tooken')
 
 function lexer(sourceCode) {
-	sourceCode = sourceCode.split(/\r\n/g)
+	sourceCode = sourceCode.replace(/\r/g, '').split(/\n/g)
 
 	let tokeenList = tookenfier(sourceCode)
-	
+
 	return tokeenList
 }
 
@@ -25,8 +25,11 @@ function tookenfier(sourceCode) {
 
 	function controller(string) {
 		tookenList.push(
-			string[0] === '#' ? header()
-				: string[0] === '*' ? list()
+			/^\#/.test(string) ? header()
+				: /^[*+-] /.test(string) ? list()
+				: /^\d*\. /.test(string) ? list(true)
+				: /^```/.test(string) ? codeBlock()
+				: /^>/.test(string) ? quote()
 				: string !== '' ? p(string)
 				: tag()
 		)
@@ -53,7 +56,8 @@ function tookenfier(sourceCode) {
 			counter()
 		}
 	}
-	function list() {
+	function list(orderd) {
+		let regexp = orderd ? /^\d*\. / : /^[*+-] /
 		let nestedlvl = 0
 		let listTag = content()
 		pointer--
@@ -62,13 +66,14 @@ function tookenfier(sourceCode) {
 		function content() {
 			let newArr = []
 			counter()
-			return ul(newArr)
+			return orderd ? ol(newArr) : ul(newArr)
 
 			function counter() {
-				if(sourceCode[pointer] === undefined) return
+				let string = sourceCode[pointer]
+				if(string === undefined) return
 				
-				sourceCode[pointer][nestedlvl] === '\t' ? ifUl()
-					: sourceCode[pointer].slice(nestedlvl, nestedlvl+2) === '* ' ? ifLi()
+				string[nestedlvl] === '\t' ? ifUl()
+					: regexp.test(string.slice(nestedlvl, string.length)) ? ifLi()
 					: ''
 
 
@@ -77,9 +82,9 @@ function tookenfier(sourceCode) {
 					newArr.push(content())
 				}
 				function ifLi() {
-					let string = sourceCode[pointer].slice(
+					string = string.slice(
 						nestedlvl+2, 
-						sourceCode[pointer].length
+						string.length
 					)
 					pointer++
 					newArr.push(li(string))
@@ -88,8 +93,75 @@ function tookenfier(sourceCode) {
 			}
 		}
 	}
-}
+	function codeBlock() {
+		let array = []
+		let index = 0
+		let close = false
+		while(!close) {
+			index++
+			if(/^```/.test(sourceCode[index+pointer])) close = true
+			if(sourceCode.length < index+pointer) return pointer--
+		}
+		counter()
 
+		return pre(p(array.join('\n')))
+
+
+		function counter() {
+			pointer++
+			if(/^```/.test(sourceCode[pointer])) return
+			array.push(sourceCode[pointer])
+			counter()
+		}
+	}
+	function quote() {
+		let nestedlvl = 1
+		let results = blockquote(content())
+		pointer--
+		return results
+
+
+		function content() {
+			let array = []
+			let textNodes = []
+			let listTag = false
+			counter()
+			return array
+
+
+			function counter() {
+				let string = sourceCode[pointer]
+				if(string === '' || string === undefined || /^#/.test(string)) {
+					if(textNodes) 
+						if(listTag) array.push(ul(textNodes))
+						else array.push(p(textNodes.join('')))
+					return
+				}
+				let newString = string.slice(nestedlvl, string.length);
+
+				/^\* /.test(newString) ? listTag = true
+					: /^ \* /.test(newString) ? listTag = true
+					: '';
+
+				/^>/.test(newString) ? ifNested()
+					: ifContent()
+
+				function ifContent() {
+					if(listTag) textNodes.push(li(newString.replace(/\*\s/g,'')))
+					else textNodes.push(' '+string.replace(/>/g,''))
+					pointer++
+					counter()
+				}
+				function ifNested() {
+					if(listTag) array.push(ul(textNodes))
+					else array.push(p(textNodes.join('')))
+					nestedlvl++
+					array.push(blockquote(content()))
+				}
+			}
+		}
+	}
+}
 
 
 module.exports = lexer

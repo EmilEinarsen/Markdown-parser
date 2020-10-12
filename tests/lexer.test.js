@@ -259,3 +259,153 @@ describe('file test, lexer', () => {
 		)
 	})
 })
+describe('CodeBlock', () => {
+	test('basic', () => {
+		expect(
+			lexer('```\nhej\ndå\n```')
+		).toStrictEqual([
+			{
+				name: "pre",
+				attributes: undefined, 
+				content: [
+					{
+						name: "p",
+						attributes: undefined, 
+						content: ["hej\ndå"],
+					}
+				], 
+			}
+		])
+	})
+})
+describe('QuoteBlock', () => {
+	test('lvl 2 nested QuoteBlock', () => {
+		expect(
+			lexer(
+`
+>1
+>2
+>>3
+>4
+`
+			)
+		).toStrictEqual([
+			{
+				name: undefined,
+				attributes: undefined, 
+				content: undefined, 
+			}, 
+			{
+				name: "blockquote",
+				attributes: undefined, 
+				content: [
+					{
+						name: "p",
+						attributes: undefined, 
+						content: [" 1 2"], 
+					}, 
+					{
+						name: "blockquote",		
+						attributes: undefined, 
+						content: [
+							{
+								name: "p",
+								attributes: undefined, 
+								content: [" 3 4"], 
+							}
+						], 
+					}
+				],
+			},
+			{ attributes: undefined, content: undefined, name: undefined },
+		])
+	})
+	test('Lazy lvl 2 nested QuoteBlock', () => {
+		expect(
+			lexer(
+`
+>1
+2
+>>3
+4
+`
+			)
+		).toStrictEqual(
+			lexer(
+`
+>1
+>2
+>>3
+>4
+`
+			)
+		)
+	})
+	test('Lazy lvl 2 nested QuoteBlock with list', () => {
+		expect(
+			lexer(
+`
+>* 1
+* 2
+> * 3
+>>* 4
+`
+			)
+		).toStrictEqual([
+			{ attributes: undefined, content: undefined, name: undefined },
+			{
+				name: "blockquote",
+				attributes: undefined,
+				content: [
+					{
+						name: "ul",
+						attributes: undefined,
+						content: [
+							{
+								name: "li",
+								attributes: undefined,
+								content: [
+									"1"
+								]
+							},
+							{
+								name: "li",
+								attributes: undefined,
+								content: [
+									" 2"
+								]
+							},
+							{
+								name: "li",
+								attributes: undefined,
+								content: [
+									" 3"
+								]
+							}
+						]
+					},
+					{
+						name: "blockquote",
+						attributes: undefined,
+						content: [
+							{
+								name: "ul",
+								attributes: undefined,
+								content: [
+									{
+										name: "li",
+										attributes: undefined,
+										content: [
+											"4"
+										]
+									}
+								]
+							}
+						]
+					}
+				]
+			},
+			{ attributes: undefined, content: undefined, name: undefined },
+		])
+	})
+})
